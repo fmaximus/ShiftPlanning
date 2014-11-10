@@ -1,0 +1,12 @@
+package models
+
+import scala.math.Ordering.LongOrdering
+import scala.slick.driver.HsqldbDriver
+import org.virtuslab.unicorn.{HasJdbcDriver, LongUnicornCore}
+  
+object Unicorn extends LongUnicornPlay with HasJdbcDriver {
+  self: LongOrdering =>
+  val driver = HsqldbDriver
+
+  override val ordering: Ordering[Long] = scala.math.Ordering.Long
+}

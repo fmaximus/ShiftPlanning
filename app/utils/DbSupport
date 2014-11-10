@@ -1,0 +1,7 @@
+package app.utils
+
+trait DbSupport {
+    import play.api.db._
+
+    implicit val session: Session = DB.createSession()
+}
