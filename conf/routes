@@ -1,9 +1,17 @@
 # Routes
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
-#GET / controllers.MainController.index()
-#GET /message controllers.MessageController.getMessage()
-#GET /assets/javascripts/routes controllers.MessageController.javascriptRoutes()
+GET     /                           @controllers.Application.index(any = "none")
+GET     /api/randomUUID             @controllers.Application.randomUUID
+
+# Location API
+GET     /api/locations              @controllers.Locations.list
+POST    /api/locations/:id          @controllers.Locations.create(id)
+
 # Map static resources from the /public folder to the /assets URL path
-#GET /assets/*file controllers.Assets.at(path="/public", file)
-#GET /webjars/*file controllers.WebJarAssets.at(file)
+
+GET   /assets/javascripts/routes   @controllers.Application.javascriptRoutes()
+GET   /assets/*file                 controllers.Assets.at(path="/public", file)
+GET   /webjars/*file                controllers.WebJarAssets.at(file)
+
+GET   /*any                         @controllers.Application.index(any)

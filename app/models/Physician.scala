@@ -1,31 +1,28 @@
 package models
-
-import org.virtuslab.unicorn.LongUnicornPlay._
-import org.virtuslab.unicorn.LongUnicornPlay.driver.simple._
-    
-import scala.slick.lifted.Tag
-import scala.slick.driver.HsqldbDriver.MappedJdbcType
     
 import org.joda.time.{LocalDate, Weeks, DateTime}
-import com.github.tototoshi.slick.HsqldbJodaSupport._
+     
+import reactivemongo.bson._
     
-object Function extends Enumeration {
-    val Attending, Resident = Value
-
-    implicit val enumMapper = MappedJdbcType.base[Value, String](_.toString(), this.withName)
-}
-
-case class PhysicianId(id: Long) extends AnyVal with BaseId
+case class Physician(fname: String, lname: String, function: Function.Value, id: Option[BSONObjectID] = None)
+case class PhysicianPartTime(timestamp: DateTime, locationId: BSONObjectID, dayOfWeek: WeekDay.Value, off: Boolean)
+/*
+object Physician {
+    implicit object PhysicianBSONReader extends BSONDocumentReader[Physician] {
+        def read(doc: BSONDocument): Physician =
+            Physician(  
+                doc.getAs[String]("fname").get,
+                doc.getAs[String]("lname").get,
+                doc.getAs[Function.Value]("function").get,
+                doc.getAs[BSONObjectID]("_id"))
+    }
     
-object PhysicianId extends IdCompanion[PhysicianId]
-    
-case class Physician(fname: String, lname: String, function: Function.Value, id: Option[PhysicianId] = None) extends WithId[PhysicianId]
-case class PhysicianPartTime(timestamp: DateTime, locationId: LocationId, dayOfWeek: WeekDay.Value, off: Boolean)
-
-class Physicians(tag: Tag) extends IdTable[PhysicianId, Physician](tag, "physicians") {
-  def fname: Column[String] = column[String]("fname")
-  def lname: Column[String] = column[String]("lname")
-  def function: Column[Function.Value] = column[Function.Value]("function")
-
-  def * = (fname, lname, function, id.?) <> (Physician.tupled, Physician.unapply)
-}
+    implicit object PhysicianBSONWriter extends BSONDocumentWriter[Physician] {
+        def write(physician: Physician): BSONDocument =
+            BSONDocument(
+                "_id" -> physician.id.getOrElse(BSONObjectID.generate),
+                "fname" -> physician.fname,
+                "lname" -> physician.lname,
+                "function" -> physician.function)
+  }   
+}*/

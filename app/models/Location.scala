@@ -1,25 +1,27 @@
 package models
-
-import org.virtuslab.unicorn.LongUnicornPlay._
-import org.virtuslab.unicorn.LongUnicornPlay.driver.simple._
-    
-import scala.slick.lifted.Tag
-import scala.slick.driver.HsqldbDriver.MappedJdbcType
     
 import org.joda.time.{LocalDate, Weeks, DateTime}
-import com.github.tototoshi.slick.HsqldbJodaSupport._
-    
-case class LocationId(id: Long) extends AnyVal with BaseId
+       
+import reactivemongo.bson._
+import EnumUtils._
 
-object LocationId extends IdCompanion[LocationId]
+case class Location(name: String, external: Boolean = false, id: Option[BSONObjectID] = None)
+case class LocationOpen(timestamp: DateTime, locationId: BSONObjectID, dayOfWeek: WeekDay.Value, open: Boolean, id: Option[BSONObjectID] = None)
+/*
+object Location {
+    implicit object LocationBSONReader extends BSONDocumentReader[Location] {
+        def read(doc: BSONDocument): Location =
+            Location(  
+                doc.getAs[String]("name").get,
+                doc.getAs[Boolean]("external").getOrElse(false),
+                doc.getAs[BSONObjectID]("_id"))
+    }
     
-case class Location(name: String, external: Boolean = false, id: Option[LocationId] = None) extends WithId[LocationId]
-case class LocationOpen(timestamp: DateTime, locationId: LocationId, dayOfWeek: WeekDay.Value, open: Boolean)
-
-class Locations(tag: Tag) extends IdTable[LocationId, Location](tag, "locations") {
-  def name: Column[String] = column[String]("name")
-  def external: Column[Boolean] = column[Boolean]("external")
-  
-  // Every table needs a * projection with the same type as the table's type parameter
-  def * = (name, external, id.?) <> (Location.tupled, Location.unapply)
-}
+    implicit object LocationBSONWriter extends BSONDocumentWriter[Location] {
+        def write(location: Location): BSONDocument =
+            BSONDocument(
+                "_id" -> location.id.getOrElse(BSONObjectID.generate),
+                "name" -> location.name,
+                "external" -> location.external)
+  }   
+}*/

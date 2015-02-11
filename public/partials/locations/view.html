@@ -1,0 +1,65 @@
+
+
+    <div ng-controller="ListLocationCtrl as list">
+        <div class="jumbotron">
+            <h2>A Modern Web Template</h2>
+            <p class="pull-right">... a UI created using AngularJS and Bootstrap</p>
+        </div>
+
+        <div>
+            <div class="form-group">
+                <h3>
+                    Locations
+                    <a ng-href="/#/locations/create" class="btn btn-primary pull-right" id="btn_user_create">Add Location</a>
+                </h3>
+                <hr>
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" ng-model="searchText" placeholder="Type here to filter Users...">
+                <hr>
+            </div>
+
+
+            <table id="location_list" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>External</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="location in list.locations | filter:searchText">
+                    <td>
+                        {{ location.name }}
+                    </td>
+                    <td>
+                        {{ location.external }}
+                    </td>
+                    <td>
+                        <a ng-href="/#/locations/edit/{{location.id}}" class="btn btn-success pull-right" id="btn_update">Edit Location</a>
+                        <a ng-href="/#/locations/delete/{{location.id}}" class="btn btn-success pull-right" id="btn_delete">Remove Location</a>
+                    </td>
+                </tr>
+                <tr ng-hide="list.locations.length">
+                    <td colspan="3">
+                        <p class="text-center">No Locations Found</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h3>
+                Debug
+            </h3>
+            <hr>
+            <accordion>
+                <accordion-group is-open="status.open">
+                    <accordion-heading>
+                        Json Data <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                    </accordion-heading>
+                    <pre>{{ uc.users | json }}</pre>
+                </accordion-group>
+            </accordion>
+        </div>
+
+    </div>
