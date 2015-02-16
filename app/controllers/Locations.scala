@@ -4,6 +4,7 @@ import play.modules.reactivemongo.MongoController
 import play.modules.reactivemongo.json.collection.JSONCollection
 import scala.concurrent.Future
 import reactivemongo.api.Cursor
+import reactivemongo.bson.BSONObjectID
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import org.slf4j.{LoggerFactory, Logger}
 import javax.inject.Singleton
@@ -36,11 +37,11 @@ class Locations extends Controller with MongoController {
   import models._
   import models.JsonFormats._
 
-  def create(id: String) = Action.async(parse.json) {
+  def save = Action.async(parse.json) {
     request =>
       request.body.validate[Location].map {
         location =>
-          collection.insert(location).map {
+          collection.save(location).map {
             lastError =>
               logger.debug(s"Successfully inserted with LastError: $lastError")
               Created(s"Location Created")
@@ -49,41 +50,29 @@ class Locations extends Controller with MongoController {
         e => Future.successful(BadRequest("Detected error:"+ JsError.toFlatJson(e)))
       }
   }
-
-  def update(name: String) = Action.async(parse.json) {
-    request =>
-      request.body.validate[Location].map {
-        location =>
-          // find our location by name
-          val nameSelector = Json.obj("name" -> name)
-          collection.update(nameSelector, location).map {
-            lastError =>
-              logger.debug(s"Successfully updated with LastError: $lastError")
-              Created(s"Location Updated")
-          }
-      }.getOrElse(Future.successful(BadRequest("invalid json")))
+    
+ def get(id: String) = Action.async {
+    val cursor: Cursor[Location] = collection.
+     find(Json.obj("_id" -> id)).
+     cursor[Location]
+     
+     cursor.headOption.map { maybeLocation =>
+          maybeLocation.map { location => Json.toJson(location) }.map {  location => Ok(location) }.getOrElse(NotFound)
+     }
   }
 
   def list = Action.async {
     val cursor: Cursor[Location] = collection.
       find(Json.obj()).
-      // sort them by creation date
       sort(Json.obj("created" -> -1)).
-      // perform the query and get a cursor of JsObject
       cursor[Location]
 
-    // gather all the JsObjects in a list
     val futureLocationsList: Future[List[Location]] = cursor.collect[List]()
-
-    // transform the list into a JsArray
-    val futureLocationsJsonArray: Future[JsArray] = futureLocationsList.map { locations =>
-      Json.arr(locations)
-    }
-    // everything's ok! Let's reply with the array
-    futureLocationsJsonArray.map {
-      locations =>
-        Ok(locations(0))
-    }
+      
+    for {        
+        locations <- futureLocationsList
+        locationsJsonArray = Json.arr(locations)        
+    } yield Ok(locationsJsonArray(0))
   }
 
 }

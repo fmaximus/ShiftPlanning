@@ -1,21 +1,19 @@
 
 
     <div ng-controller="ListLocationCtrl as list">
-        <div class="jumbotron">
-            <h2>A Modern Web Template</h2>
-            <p class="pull-right">... a UI created using AngularJS and Bootstrap</p>
-        </div>
-
         <div>
             <div class="form-group">
                 <h3>
                     Locations
-                    <a ng-href="/#/locations/create" class="btn btn-primary pull-right" id="btn_user_create">Add Location</a>
+                    <a ng-click="list.create()" class="btn btn-primary pull-right" id="btn_create" role="button">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            Add Location
+                    </a>
                 </h3>
                 <hr>
             </div>
             <div class="form-group">
-                <input class="form-control" type="text" ng-model="searchText" placeholder="Type here to filter Users...">
+                <input class="form-control" type="text" ng-model="searchText" placeholder="Type here to filter Location...">
                 <hr>
             </div>
 
@@ -28,7 +26,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="location in list.locations | filter:searchText">
+                <tr ng-repeat="location in locations | filter:searchText">
                     <td>
                         {{ location.name }}
                     </td>
@@ -36,11 +34,13 @@
                         {{ location.external }}
                     </td>
                     <td>
-                        <a ng-href="/#/locations/edit/{{location.id}}" class="btn btn-success pull-right" id="btn_update">Edit Location</a>
-                        <a ng-href="/#/locations/delete/{{location.id}}" class="btn btn-success pull-right" id="btn_delete">Remove Location</a>
+                        <button ng-click="list.edit(location._id.$oid)" class="btn btn-primary pull-right" id="btn_update" aria-label="Edit">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                            <span class="sr-only">Edit</span>
+                        </button>
                     </td>
                 </tr>
-                <tr ng-hide="list.locations.length">
+                <tr ng-hide="locations.length">
                     <td colspan="3">
                         <p class="text-center">No Locations Found</p>
                     </td>
@@ -57,7 +57,7 @@
                     <accordion-heading>
                         Json Data <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
                     </accordion-heading>
-                    <pre>{{ uc.users | json }}</pre>
+                    <pre>{{ locations | json }}</pre>
                 </accordion-group>
             </accordion>
         </div>

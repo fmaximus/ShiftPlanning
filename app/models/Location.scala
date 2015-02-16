@@ -5,8 +5,8 @@ import org.joda.time.{LocalDate, Weeks, DateTime}
 import reactivemongo.bson._
 import EnumUtils._
 
-case class Location(name: String, external: Boolean = false, id: Option[BSONObjectID] = None)
-case class LocationOpen(timestamp: DateTime, locationId: BSONObjectID, dayOfWeek: WeekDay.Value, open: Boolean, id: Option[BSONObjectID] = None)
+case class Location(name: String, external: Boolean = false, _id: Option[BSONObjectID] = None)
+case class LocationOpen(timestamp: DateTime, locationId: BSONObjectID, dayOfWeek: WeekDay.Value, open: Boolean, _id: Option[BSONObjectID] = None)
 /*
 object Location {
     implicit object LocationBSONReader extends BSONDocumentReader[Location] {

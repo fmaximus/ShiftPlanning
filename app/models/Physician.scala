@@ -4,7 +4,7 @@ import org.joda.time.{LocalDate, Weeks, DateTime}
      
 import reactivemongo.bson._
     
-case class Physician(fname: String, lname: String, function: Function.Value, id: Option[BSONObjectID] = None)
+case class Physician(fname: String, lname: String, function: Function.Value, _id: Option[BSONObjectID] = None)
 case class PhysicianPartTime(timestamp: DateTime, locationId: BSONObjectID, dayOfWeek: WeekDay.Value, off: Boolean)
 /*
 object Physician {

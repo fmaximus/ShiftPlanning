@@ -6,7 +6,8 @@ GET     /api/randomUUID             @controllers.Application.randomUUID
 
 # Location API
 GET     /api/locations              @controllers.Locations.list
-POST    /api/locations/:id          @controllers.Locations.create(id)
+GET     /api/locations/:id          @controllers.Locations.get(id)
+POST    /api/locations              @controllers.Locations.save
 
 # Map static resources from the /public folder to the /assets URL path
 

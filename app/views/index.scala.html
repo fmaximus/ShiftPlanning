@@ -21,6 +21,12 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#">Shift Planning</a>
+        </div>     
+        <div class="collapse navbar-collapse" id="sp-navbar">
+            <ul class="nav navbar-nav">
+                <li><a href="/locations">Locations</a></li>
+                <li><a href="/physicians" disabled>Physicians</a></li>
+            </ul>
         </div>
     </div>
 </nav>
@@ -36,7 +42,7 @@
 <footer>
     <hr/>
     <div>
-        <span>&copy; YourProjectName.com 2015</span>
+        <span>&copy; ShiftPlanning 2015</span>
         </div>
     <div>
         <span app-version></span>
@@ -54,10 +60,7 @@
     
 <!-- Coffee script compilled resources-->
 <script src='@routes.Assets.at("javascripts/app.js")' type="text/javascript"></script>
-<script src='@routes.Assets.at("javascripts/components/version/version.js")' type="text/javascript"></script>
-
-<script src='@routes.Assets.at("javascripts/controllers/LocationCtrl.js")' type="text/javascript"></script>
-<script src='@routes.Assets.at("javascripts/services/LocationService.js")' type="text/javascript"></script>
-<script src='@routes.Assets.at("javascripts/services/UuidService.js")' type="text/javascript"></script>
+<script src='@routes.Assets.at("javascripts/modules/version.js")' type="text/javascript"></script>
+<script src='@routes.Assets.at("javascripts/modules/location.js")' type="text/javascript"></script>
 
 </html>
