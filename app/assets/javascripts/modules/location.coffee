@@ -11,7 +11,7 @@ angular.module('ShiftPlanning.locations', ['ngRoute'])
 
         constructor: (@$log, @$resource, @$q) ->
             @$log.debug "constructing LocationService"
-            @Resource = @$resource('/api/locations/:id', {id: '@_id'}, { 'update': { method:'PUT' } })
+            @Resource = @$resource('/api/locations/:id', {}, { 'update': { method:'PUT' } })
 
         list: () ->
             @$log.debug "listLocations()"
@@ -24,10 +24,7 @@ angular.module('ShiftPlanning.locations', ['ngRoute'])
         save: (location) ->
             @$log.debug "createLocation() #{angular.toJson(location, true)}"
             resource = new @Resource(location)
-            if (location.id)
-                resource.$update().$promise
-            else
-                resource.$save().$promise
+            rs = resource.$save()
 
         remove: (id) ->
             @$log.debug "removeLocation()"
@@ -55,14 +52,14 @@ angular.module('ShiftPlanning.locations', ['ngRoute'])
             modalInstance = @$modal.open({
                 controller: 'SaveLocationCtrl', 
                 templateUrl: '/assets/partials/locations/edit.html',
-                size: "lg",
+                # size: "lg",
                 resolve: {
-                    location: () -> { "external": false }
+                    location: () -> { "external": false; open: ["Mon", "Tue","Wed","Thu","Fri"] }
                     action: () -> "Create"
                 }
             })
 
-            modalInstance.result.then(() -> @list())
+            modalInstance.result.then(() => @list())
     
         edit: (id) ->
             @locationService.get(id).then(
@@ -70,7 +67,7 @@ angular.module('ShiftPlanning.locations', ['ngRoute'])
                     modalInstance = @$modal.open({
                         controller: 'SaveLocationCtrl', 
                         templateUrl: '/assets/partials/locations/edit.html',
-                        size: "lg",
+                        # size: "lg",
                         resolve: {
                             location: () -> data
                             action: () -> "Edit"
@@ -78,21 +75,23 @@ angular.module('ShiftPlanning.locations', ['ngRoute'])
                     })
 
                     modalInstance.result.then(
-                        () -> @list(),
-                        () -> @$log.info('Modal dismissed at: ' + new Date());
+                        () => @list(),
+                        () => @$log.info('Modal dismissed at: ' + new Date());
                     )
             )
 
 .controller 'SaveLocationCtrl',
     class SaveLocationCtrl
-        constructor: ($log, $scope, $location, locationService, $modalInstance, location, action) ->
+        constructor: ($log, $scope, locationService, $modalInstance, location, action) ->
             $log.debug "constructing SaveLocationCtrl"
             $scope.location = location
             $scope.action = action
+            $scope.weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
             $scope.save = () ->
                 $log.debug "createLocation(#{angular.toJson($scope.location, true)})"
-                locationService.save($scope.location).then(
+                promise = locationService.save($scope.location)
+                promise.then(
                     (data) =>
                         $log.debug "Promise returned #{data} Location"
                         $modalInstance.close();

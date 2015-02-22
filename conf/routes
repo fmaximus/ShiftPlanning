@@ -1,18 +1,24 @@
 # Routes
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
-GET     /                           @controllers.Application.index(any = "none")
-GET     /api/randomUUID             @controllers.Application.randomUUID
+
+GET   /assets/javascripts/routes        @controllers.Application.javascriptRoutes()
+GET   /assets/*file                     controllers.Assets.at(path="/public", file)
+GET   /webjars/*file                    controllers.WebJarAssets.at(file)
 
 # Location API
-GET     /api/locations              @controllers.Locations.list
-GET     /api/locations/:id          @controllers.Locations.get(id)
-POST    /api/locations              @controllers.Locations.save
+GET     /api/locations                  @controllers.Locations.list
+GET     /api/locations/:id              @controllers.Locations.get(id)
+POST    /api/locations                  @controllers.Locations.save
+
+# Physician API
+GET     /api/physicians                 @controllers.Physicians.list
+GET     /api/physicians/:id             @controllers.Physicians.get(id)
+POST    /api/physicians                 @controllers.Physicians.save
+
+GET   /                                 @controllers.Application.index(any = "none")
+GET   /*any                             @controllers.Application.index(any)
 
 # Map static resources from the /public folder to the /assets URL path
 
-GET   /assets/javascripts/routes   @controllers.Application.javascriptRoutes()
-GET   /assets/*file                 controllers.Assets.at(path="/public", file)
-GET   /webjars/*file                controllers.WebJarAssets.at(file)
 
-GET   /*any                         @controllers.Application.index(any)

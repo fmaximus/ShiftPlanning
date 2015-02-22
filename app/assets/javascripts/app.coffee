@@ -2,7 +2,9 @@ dependencies = [
     'ngRoute',
     'ngResource'
     'ui.bootstrap',
+    'checklist-model',
     'ShiftPlanning.locations',
+    'ShiftPlanning.physicians',
     'ShiftPlanning.services',
     'ShiftPlanning.version'
 ]

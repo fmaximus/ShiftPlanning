@@ -1,0 +1,65 @@
+<div class="modal-header">
+    <h1 class="modal-title">{{action}} Physician</h1>
+</div>
+<div class="modal-body">
+    <form id="CreatePhysicianForm" name="CreatePhysicianForm" class="form-horizontal" role="form"
+          ng-submit="save()">
+        <legend class="sm-col-12">Basic Information</legend>
+
+        <div class="form-group">
+            <label id="lbl_firstName" for="fname" class="col-sm-4 control-label">First Name</label>
+
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="fname" id="fname" placeholder="Enter a first name"
+                       ng-model="physician.fname" required="required" ng-init="$element.focus()">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label id="lbl_lastName" for="lname" class="col-sm-4 control-label">Last Name</label>
+
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="lname" id="lname" placeholder="Enter a last name"
+                       ng-model="physician.lname" required="required">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label id="lbl_function" for="function" class="col-sm-4 control-label">Function</label>
+            <div class="col-sm-8">
+                <select name="function" id="function" ng-model="physician.function">
+                    <option>Attending</option>
+                    <option>Resident</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group" ng-show="physician.function == 'Attending'">
+            <label id="lbl_partTime" for="function" class="col-sm-4 control-label">Part Time</label>
+            <div class="col-sm-8 checkbox">
+                    <input type="checkbox" name="external" id="external" ng-model="partTime">
+            </div>
+        </div>
+
+        <div ng-show="partTime">
+            <legend class="sm-col-12">Part Time</legend>
+
+            <div class="form-group" ng-repeat="weekday in weekdays">
+                <label id="lbl_open_{{weekday | lowercase}}" for="open.{{weekday | lowercase}}" class="col-sm-4 control-label">{{weekday}}</label>
+                <div class="col-sm-8 checkbox">
+                    <input type="checkbox" name="open.{{weekday | lowercase}}" id="open.{{weekday | lowercase}}" checklist-model="physician.partTime" checklist-value="weekday.substring(0,3)">
+                </div>
+            </div>
+        </div>
+        <pre>{{ physician | json }}</pre>
+
+        <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-8 text-right">
+                <button type="button" class="btn" id="btn_cancel" ng-click="cancel()">Cancel</button>
+                <button type="button" class="btn btn-warning" id="btn_create" ng-click="save()">Save</button>
+            </div>
+        </div>
+
+
+    </form>
+</div>
